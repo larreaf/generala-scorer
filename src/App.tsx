@@ -1,17 +1,10 @@
-import { CssBaseline } from '@mui/material';
-import { useState } from 'react';
-import {
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Provider } from 'react-redux';
 import './App.css';
 import Layout from './components/Layout';
 import Scorer from './components/Scorer';
-import { Provider } from 'react-redux';
 import { store } from './redux/store';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>

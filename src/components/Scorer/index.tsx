@@ -49,7 +49,7 @@ interface RenderItemOptions {
     player: string;
     category: Categories;
     score: ScoreValue;
-    handleOpenModal: (player: string, category: Categories, currentValue: number, isCrossedOut: boolean) => void;
+    handleOpenModal: (player: string, category: Categories) => void;
 }
 
 const renderScore = ({ player, category, score, handleOpenModal }: RenderItemOptions) => {
@@ -63,8 +63,6 @@ const renderScore = ({ player, category, score, handleOpenModal }: RenderItemOpt
             onClick={() => handleOpenModal(
                 player,
                 category,
-                score.value,
-                score.crossedOut
             )}
         />
     )
@@ -92,8 +90,6 @@ const renderScore = ({ player, category, score, handleOpenModal }: RenderItemOpt
 const Scorer = () => {
     const [selectedPlayer, setSelectedPlayer] = useState<string>("");
     const [selectedCategory, setSelectedCategory] = useState<Categories>();
-    const [currentValue, setCurrentValue] = useState<number>(0);
-    const [isCrossedOut, setIsCrossedOut] = useState<boolean>();
     const [openModal, setOpenModal] = useState<boolean>(false);
 
     const { addUser, getScore, categories } = useScorer();
@@ -105,11 +101,9 @@ const Scorer = () => {
 
 
     const handleCloseModal = () => setOpenModal(false);
-    const handleOpenModal = (player: string, category: Categories, currentValue: number, isCrossedOut: boolean) => {
+    const handleOpenModal = (player: string, category: Categories) => {
         setSelectedPlayer(player);
         setSelectedCategory(category);
-        setCurrentValue(currentValue);
-        setIsCrossedOut(isCrossedOut);
         setOpenModal(true);
     }
 
@@ -173,8 +167,6 @@ const Scorer = () => {
                 handleClose={handleCloseModal}
                 player={selectedPlayer}
                 category={selectedCategory}
-                currentValue={currentValue}
-                isCrossedOut={isCrossedOut}
             />
             <h2>Generala score</h2>
             <table className="score-table" style={{ borderCollapse: 'collapse', width: '100%' }}>

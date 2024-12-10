@@ -1,9 +1,7 @@
-import { Box, Button, ButtonGroup, MenuItem, Modal, TextField } from '@mui/material'
-import useScorer from '../../hooks/useScorer';
-import { Category, ScoreValue } from '../../redux/score';
-import { useEffect, useState } from 'react';
-import { current } from '@reduxjs/toolkit';
+import { Box, Button, ButtonGroup, Modal } from '@mui/material';
 import useCategoryScore from '../../hooks/useCategoryScore';
+import useScorer from '../../hooks/useScorer';
+import { Categories, ScoreValue } from '../../redux/score';
 
 const style = {
     position: 'absolute',
@@ -26,16 +24,18 @@ interface ScoreModalProps {
     open: boolean;
     handleClose: () => void;
     player: string;
-    category: Category;
+    category?: Categories;
 }
 
 const ScoreModal = (
     { open, handleClose, player, category }: ScoreModalProps
 ) => {
-    // const [scoreValue, setScoreValue] = useState<number>(currentValue)
-    // const [crossedOut, setCrossedOut] = useState<boolean>(isCrossedOut)
     const { updateScore } = useScorer()
     const { getScore } = useCategoryScore();
+
+    if (!category) {
+        return (<></>);
+    }
 
     const scores = getScore(category);
 
