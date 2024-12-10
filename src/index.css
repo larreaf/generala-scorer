@@ -78,9 +78,26 @@ table {
   flex-direction: row;
 }
 
+tbody {
+  width: 250px;
+  overflow-x: overlay;
+}
+
+thead,
+tbody {
+  display: flex;
+}
+
 tr {
   display: inline-flex;
   flex-direction: column;
+}
+
+th {
+  width: 70px;
+  font-size: 14px;
+  position: sticky;
+  z-index: 2;
 }
 
 td,
