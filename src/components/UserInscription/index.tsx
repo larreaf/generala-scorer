@@ -43,10 +43,10 @@ const FRUITS = [
 
 interface RenderItemOptions {
   item: string;
-  handleRemoveFruit: (item: string) => void;
+  handleRemoveUser: (item: string) => void;
 }
 
-function renderItem({ item, handleRemoveFruit }: RenderItemOptions) {
+function renderItem({ item, handleRemoveUser }: RenderItemOptions) {
   return (
     <ListItem
       secondaryAction={
@@ -54,7 +54,7 @@ function renderItem({ item, handleRemoveFruit }: RenderItemOptions) {
           edge="end"
           aria-label="delete"
           title="Delete"
-          onClick={() => handleRemoveFruit(item)}
+          onClick={() => handleRemoveUser(item)}
         >
           <DeleteIcon />
         </IconButton>
@@ -69,15 +69,13 @@ const UserInscription = () => {
   const navigate = useNavigate();
 
   const [inputError, setInputError] = useState<boolean>(false);
-
   const [playerName, setPlayerName] = useState<string>("");
 
   const { addUser, removeUser, getUsers } = useScorer();
 
-  const handleAddFruit = () => {
+  const handleAddUser = () => {
     const nextHiddenItem = FRUITS.find((f) => !getUsers.find(u => u.split(' ')[0] == f.split(' ')[0]));
     if (nextHiddenItem) {
-      // setFruitsInBasket((prev) => [nextHiddenItem, ...prev]);
       const fruit = nextHiddenItem.split(' ')[0]
       const player = fruit + ' ' + playerName;
       addUser(player);
@@ -85,8 +83,7 @@ const UserInscription = () => {
     }
   };
 
-  const handleRemoveFruit = (item: string) => {
-    // setFruitsInBasket((prev) => [...prev.filter((i) => i !== item)]);
+  const handleRemoveUser = (item: string) => {
     removeUser(item);
     setInputError(false);
   };
@@ -111,7 +108,7 @@ const UserInscription = () => {
       return;
     }
 
-    handleAddFruit();
+    handleAddUser();
   }
 
   return (
@@ -144,7 +141,7 @@ const UserInscription = () => {
                   title="Add player"
                   size='small'
                   disabled={disableInput}
-                  onClick={handleAddFruit}
+                  onClick={handleAddUser}
                 >
                   <AddIcon />
                 </IconButton>
@@ -157,7 +154,7 @@ const UserInscription = () => {
       <List sx={{ mt: 1 }}>
         <TransitionGroup>
           {getUsers.map((item) => (
-            <Collapse key={item}>{renderItem({ item, handleRemoveFruit })}</Collapse>
+            <Collapse key={item}>{renderItem({ item, handleRemoveUser })}</Collapse>
           ))}
         </TransitionGroup>
       </List>
