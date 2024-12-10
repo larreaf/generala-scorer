@@ -1,9 +1,7 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useState } from "react";
 import useScorer from '../../hooks/useScorer';
 import { Categories, Score, ScoreValue } from "../../redux/score";
-import { AppDispatch } from "../../redux/store";
 import ScoreModal from "./modal";
 
 interface styledScore {
@@ -66,25 +64,6 @@ const renderScore = ({ player, category, score, handleOpenModal }: RenderItemOpt
             )}
         />
     )
-    // <td
-    //     key={categories[i]}
-    //     style={{
-    //         border: '1px solid #ccc',
-    //         padding: '5px',
-    //         textAlign: 'center',
-    //         backgroundColor: score.crossedOut ? 'red': 'transparent',
-    //         color: score.crossedOut ? 'white': 'inherit',
-    //         // textDecoration: score.crossedOut ? 'line-through' : 'none',
-    //     }}
-    //     onClick={() => handleOpenModal(
-    //         row.player,
-    //         categories[i],
-    //         score.value,
-    //         score.crossedOut
-    //     )}
-    // >
-    //     {score.crossedOut ? "X" : score.value}
-    // </td>
 }
 
 const Scorer = () => {
@@ -92,13 +71,7 @@ const Scorer = () => {
     const [selectedCategory, setSelectedCategory] = useState<Categories>();
     const [openModal, setOpenModal] = useState<boolean>(false);
 
-    const { addUser, getScore, categories } = useScorer();
-    const dispatch = useDispatch<AppDispatch>();
-    useEffect(() => {
-        dispatch(addUser('user1')); // Add default user or handle dynamically
-        dispatch(addUser('user2')); // Add default user or handle dynamically
-    }, [dispatch]);
-
+    const { getScore, categories } = useScorer();
 
     const handleCloseModal = () => setOpenModal(false);
     const handleOpenModal = (player: string, category: Categories) => {

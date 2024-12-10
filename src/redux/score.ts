@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 
 // export const categories = [
@@ -48,8 +48,8 @@ const scorerSlice = createSlice({
   name: 'scorer',
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<string>) => {
-      const userId = action.payload;
+    addUser: (state, action: PayloadAction<{ username: string }>) => {
+      const userId = action.payload.username;
       if (!state.userScores[userId]) {
         state.userScores[userId] = {
           ones: zeroScore,
@@ -66,7 +66,7 @@ const scorerSlice = createSlice({
         };
       }
     },
-    removeUser: (state, action: PayloadAction<{username: string}>) => {
+    removeUser: (state, action: PayloadAction<{ username: string }>) => {
       delete state.userScores[action.payload.username];
     },
     renameUser: (state, action: PayloadAction<{ oldName: string; newName: string; }>) => {
@@ -74,7 +74,7 @@ const scorerSlice = createSlice({
       const newKey = action.payload.newName;
 
       // the user already exists
-      if (newKey in state.userScores){
+      if (newKey in state.userScores) {
         return;
       }
 
@@ -94,8 +94,15 @@ const scorerSlice = createSlice({
   },
 });
 
-export const { addUser, updateScore, resetScore } = scorerSlice.actions;
+export const { addUser, removeUser, renameUser, updateScore, resetScore } = scorerSlice.actions;
 export default scorerSlice.reducer;
 
 // Selectors
 export const getScore = (state: RootState) => state.scorer.userScores;
+
+export const getUsers = createSelector(
+  getScore,
+  (state) => {
+    const users = Object.entries(state).map(s => s[0]);
+    return users;
+  });
