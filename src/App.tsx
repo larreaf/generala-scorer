@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './components/Layout';
 import Scorer from './components/Scorer';
@@ -10,7 +11,12 @@ function App() {
     <>
       <Provider store={store}>
         <Layout>
-          <Scorer/>
+          <BrowserRouter>
+            <Routes>
+              {/* <Route path="/" element={<Users />} /> */}
+              <Route path="/scorer" element={<Scorer />} />
+            </Routes>
+          </BrowserRouter>
         </Layout>
 
       </Provider>
