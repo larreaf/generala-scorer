@@ -1,7 +1,10 @@
+import styled from '@emotion/styled';
 import {
-  Delete as DeleteIcon,
   Add as AddIcon,
+  Delete as DeleteIcon,
+  Casino as CasinoIcon,
 } from '@mui/icons-material';
+import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +14,24 @@ import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import useScorer from '../../hooks/useScorer';
-import { TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+const StyledUsers = styled.div`
+  background-color: white;
+  color: black;
+  border: 5px black;
+  border-radius: 30px;
+  padding: 8px;
+`
+
+// const StyledHeader = styled.div`
+//   padding-left: 16px;
+//   padding-right: 16px;
+//   height: 46px;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+// `
 
 const FRUITS = [
   '🍏 Apple',
@@ -45,19 +65,24 @@ function renderItem({ item, handleRemoveFruit }: RenderItemOptions) {
   );
 }
 
-const Users = () => {
-  const [fruitsInBasket, setFruitsInBasket] = React.useState(FRUITS.slice(0, 3));
+const UserInscription = () => {
+  const navigate = useNavigate();
+  const [fruitsInBasket, setFruitsInBasket] = React.useState<Array<string>>([]);
+  const [playerName, setPlayerName] = React.useState<string>("");
+
   const { addUser, removeUser, getUsers } = useScorer();
 
-  for (let i = 0; i < fruitsInBasket.length; i++) {
-    addUser(fruitsInBasket[i]);
-  }
+  // for (let i = 0; i < fruitsInBasket.length; i++) {
+  //   addUser(fruitsInBasket[i]);
+  // }
 
   const handleAddFruit = () => {
     const nextHiddenItem = FRUITS.find((i) => !fruitsInBasket.includes(i));
     if (nextHiddenItem) {
       setFruitsInBasket((prev) => [nextHiddenItem, ...prev]);
-      addUser(nextHiddenItem)
+      const fruit = nextHiddenItem.split(' ')[0]
+      const player = fruit + ' ' + playerName;
+      addUser(player);
     }
   };
 
@@ -67,15 +92,38 @@ const Users = () => {
   };
 
   return (
-    <div>
-      <TextField></TextField>
+    <StyledUsers>
       <Button
-        variant="contained"
-        disabled={fruitsInBasket.length >= FRUITS.length}
-        onClick={handleAddFruit}
+        variant='outlined'
+        size='large'
+        sx={{marginTop: '16px'}}
+        onClick={() => navigate("/scorer")}
       >
-        <AddIcon />
+        Play
+        <CasinoIcon />
       </Button>
+      <List sx={{ mt: 1 }}>
+        <ListItem
+          secondaryAction={
+            <IconButton
+              edge="end"
+              aria-label="add-player"
+              title="Add player"
+              size='small'
+              disabled={fruitsInBasket.length >= FRUITS.length}
+              onClick={handleAddFruit}
+            >
+              <AddIcon />
+            </IconButton>
+          }
+        >
+          <ListItem>
+            <TextField
+              size='small'
+              onChange={(e) => setPlayerName(e.target.value)} />
+          </ListItem>
+        </ListItem>
+      </List>
       <List sx={{ mt: 1 }}>
         <TransitionGroup>
           {getUsers.map((item) => (
@@ -83,8 +131,8 @@ const Users = () => {
           ))}
         </TransitionGroup>
       </List>
-    </div>
+    </StyledUsers>
   );
 }
 
-export default Users;
+export default UserInscription;

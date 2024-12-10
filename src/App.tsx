@@ -4,6 +4,7 @@ import './App.css';
 import Layout from './components/Layout';
 import Scorer from './components/Scorer';
 import { store } from './redux/store';
+import UserInscription from './components/UserInscription';
 
 function App() {
 
@@ -13,12 +14,11 @@ function App() {
         <Layout>
           <BrowserRouter>
             <Routes>
-              {/* <Route path="/" element={<Users />} /> */}
+              <Route path="/" element={<UserInscription/>} />
               <Route path="/scorer" element={<Scorer />} />
             </Routes>
           </BrowserRouter>
         </Layout>
-
       </Provider>
 
       {/* <HistoryRouter history={history}> */}

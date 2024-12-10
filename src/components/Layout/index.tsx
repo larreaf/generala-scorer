@@ -1,4 +1,3 @@
-import Users from "../User";
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -7,10 +6,9 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
 
   return (
-   <div>
-    <Users/>
-    {children}
-   </div>
+    <div>
+      {children}
+    </div>
   );
 };
 
