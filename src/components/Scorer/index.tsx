@@ -53,7 +53,15 @@ interface RenderItemOptions {
 
 const renderScore = ({ player, category, score, handleOpenModal }: RenderItemOptions) => {
     if (score.crossedOut) {
-        return (<CrossedOut key={category} />)
+        return (
+            <CrossedOut
+                key={category}
+                onClick={() => handleOpenModal(
+                    player,
+                    category,
+                )}
+            />
+        )
     }
     return (
         <Scored
