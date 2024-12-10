@@ -74,6 +74,18 @@ const UserInscription = () => {
   const { addUser, removeUser, getUsers } = useScorer();
 
   const handleAddUser = () => {
+    setInputError(false);
+
+    if (disableInput) {
+      setInputError(true);
+      return;
+    }
+
+    if (playerName === '') {
+      setInputError(true);
+      return;
+    }
+
     const nextHiddenItem = FRUITS.find((f) => !getUsers.find(u => u.split(' ')[0] == f.split(' ')[0]));
     if (nextHiddenItem) {
       const fruit = nextHiddenItem.split(' ')[0]
@@ -88,25 +100,24 @@ const UserInscription = () => {
     setInputError(false);
   };
 
+  const disableInput = useMemo(() => {
+    return getUsers.length >= FRUITS.length;
+  }, [getUsers]);
+
   const errorHelperText = useMemo(() => {
-    if (inputError) {
+    if (inputError && disableInput) {
       return 'You cannot add more players';
     }
+
+    if (inputError && playerName === '') {
+      return 'Player name cannot be empty';
+    }   
 
     return '';
   }, [inputError]);
 
-  const disableInput = useMemo(() => {
-    return getUsers.length >= FRUITS.length;
-  }, [getUsers])
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (disableInput) {
-      setInputError(true);
-      return;
-    }
 
     handleAddUser();
   }
