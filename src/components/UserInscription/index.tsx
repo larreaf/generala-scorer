@@ -1,20 +1,20 @@
 import styled from '@emotion/styled';
 import {
   Add as AddIcon,
-  Delete as DeleteIcon,
   Casino as CasinoIcon,
+  Delete as DeleteIcon,
 } from '@mui/icons-material';
-import { TextField } from '@mui/material';
+import { FormControl, FormHelperText, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import * as React from 'react';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TransitionGroup } from 'react-transition-group';
 import useScorer from '../../hooks/useScorer';
-import { useNavigate } from 'react-router-dom';
 
 const StyledUsers = styled.div`
   background-color: white;
@@ -67,61 +67,91 @@ function renderItem({ item, handleRemoveFruit }: RenderItemOptions) {
 
 const UserInscription = () => {
   const navigate = useNavigate();
-  const [fruitsInBasket, setFruitsInBasket] = React.useState<Array<string>>([]);
-  const [playerName, setPlayerName] = React.useState<string>("");
+
+  const [inputError, setInputError] = useState<boolean>(false);
+
+  const [playerName, setPlayerName] = useState<string>("");
 
   const { addUser, removeUser, getUsers } = useScorer();
 
-  // for (let i = 0; i < fruitsInBasket.length; i++) {
-  //   addUser(fruitsInBasket[i]);
-  // }
-
   const handleAddFruit = () => {
-    const nextHiddenItem = FRUITS.find((i) => !fruitsInBasket.includes(i));
+    const nextHiddenItem = FRUITS.find((f) => !getUsers.find(u => u.split(' ')[0] == f.split(' ')[0]));
     if (nextHiddenItem) {
-      setFruitsInBasket((prev) => [nextHiddenItem, ...prev]);
+      // setFruitsInBasket((prev) => [nextHiddenItem, ...prev]);
       const fruit = nextHiddenItem.split(' ')[0]
       const player = fruit + ' ' + playerName;
       addUser(player);
+      setPlayerName("");
     }
   };
 
   const handleRemoveFruit = (item: string) => {
-    setFruitsInBasket((prev) => [...prev.filter((i) => i !== item)]);
+    // setFruitsInBasket((prev) => [...prev.filter((i) => i !== item)]);
     removeUser(item);
+    setInputError(false);
   };
+
+  const errorHelperText = useMemo(() => {
+    if (inputError) {
+      return 'You cannot add more players';
+    }
+
+    return '';
+  }, [inputError]);
+
+  const disableInput = useMemo(() => {
+    return getUsers.length >= FRUITS.length;
+  }, [getUsers])
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (disableInput) {
+      setInputError(true);
+      return;
+    }
+
+    handleAddFruit();
+  }
 
   return (
     <StyledUsers>
       <Button
         variant='outlined'
         size='large'
-        sx={{marginTop: '16px'}}
+        sx={{ marginTop: '16px' }}
+        disabled={getUsers.length == 0}
         onClick={() => navigate("/scorer")}
       >
         Play
         <CasinoIcon />
       </Button>
       <List sx={{ mt: 1 }}>
-        <ListItem
-          secondaryAction={
-            <IconButton
-              edge="end"
-              aria-label="add-player"
-              title="Add player"
-              size='small'
-              disabled={fruitsInBasket.length >= FRUITS.length}
-              onClick={handleAddFruit}
-            >
-              <AddIcon />
-            </IconButton>
-          }
-        >
-          <ListItem>
-            <TextField
-              size='small'
-              onChange={(e) => setPlayerName(e.target.value)} />
-          </ListItem>
+        <ListItem>
+          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <FormControl>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TextField
+                  error={errorHelperText != ''}
+                  size='small'
+                  value={playerName}
+                  placeholder="Enter player name"
+                  onChange={(e) => setPlayerName(e.target.value)}
+                />
+                <IconButton
+                  edge="end"
+                  aria-label="add-player"
+                  title="Add player"
+                  size='small'
+                  disabled={disableInput}
+                  onClick={handleAddFruit}
+                >
+                  <AddIcon />
+                </IconButton>
+              </div>
+              <FormHelperText error={errorHelperText != ''} >{errorHelperText}</FormHelperText>
+            </FormControl>
+          </form>
         </ListItem>
       </List>
       <List sx={{ mt: 1 }}>
