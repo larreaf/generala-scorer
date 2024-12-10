@@ -3,6 +3,7 @@ import { useState } from "react";
 import useScorer from '../../hooks/useScorer';
 import { Categories, Score, ScoreValue } from "../../redux/score";
 import ScoreModal from "./modal";
+import { camelCaseToWords } from "../../utils/caseConverter";
 
 interface styledScore {
     scoreValue: number
@@ -82,7 +83,7 @@ const Scorer = () => {
 
     const categoriesColumns = categories.map(category => ({
         field: category,
-        headerName: category.charAt(0).toUpperCase() + category.slice(1),
+        headerName: camelCaseToWords(category),
         width: 150,
     }));
 
