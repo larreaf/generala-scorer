@@ -94,10 +94,10 @@ const Scorer = () => {
 
     const { addUser, getScore, categories } = useScorer();
     const dispatch = useDispatch<AppDispatch>();
-    useEffect(() => {
-        dispatch(addUser('user1')); // Add default user or handle dynamically
-        dispatch(addUser('user2')); // Add default user or handle dynamically
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(addUser('user1')); // Add default user or handle dynamically
+    //     dispatch(addUser('user2')); // Add default user or handle dynamically
+    // }, [dispatch]);
 
 
     const handleCloseModal = () => setOpenModal(false);
