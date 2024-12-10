@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 
 // export const categories = [
@@ -100,8 +100,9 @@ export default scorerSlice.reducer;
 // Selectors
 export const getScore = (state: RootState) => state.scorer.userScores;
 
-export const getUsers = (state: RootState) => {
-  const users = Object.entries(state.scorer.userScores).map(s => s[0]);
-  
-  return users;
-};
+export const getUsers = createSelector(
+  getScore,
+  (state) => {
+    const users = Object.entries(state).map(s => s[0]);
+    return users;
+  });
