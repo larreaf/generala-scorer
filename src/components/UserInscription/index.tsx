@@ -39,6 +39,8 @@ const FRUITS = [
   '🍍 Pineapple',
   '🥥 Coconut',
   '🍉 Watermelon',
+  '🍒 cherry',
+  '🍆 beets',
 ];
 
 interface RenderItemOptions {
